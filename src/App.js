@@ -3,6 +3,7 @@ import './App.css';
 import 'semantic-ui-css/semantic.min.css';
 import { Container, Header, List, Segment } from 'semantic-ui-react';
 import Login from './components/Login';
+import EventList from './components/EventList';
 
 const data = [
   {
@@ -3221,28 +3222,19 @@ class App extends Component {
           <Login onSubmit={this.handleSubmit} />
         ) : (
           <Segment basic>
-            <Header as="h2" attached="top">
-              Forked Repos
-            </Header>
-            <Segment attached>
-              <List divided relaxed>
-                {forkEvents &&
-                  forkEvents.map(event => (
-                    <List.Item>
-                      <List.Icon name="fork" />
-                      <List.Content>
-                        <List.Header
-                          as="a"
-                          href={`https://github.com/${event.repo.name}`}>
-                          {event.repo.name}
-                        </List.Header>
-                      </List.Content>
-                    </List.Item>
-                  ))}
-              </List>
-            </Segment>
+            <EventList
+              title="Forked Repos"
+              iconName="fork"
+              eventArray={forkEvents}
+            />
 
-            <Header as="h2" attached="top">
+            <EventList
+              title="Pull Requests"
+              iconName="github"
+              eventArray={pullRequestEvents}
+            />
+
+            {/* <Header as="h2" attached="top">
               Pull Requests
             </Header>
             <Segment attached>
@@ -3261,18 +3253,7 @@ class App extends Component {
                     </List.Item>
                   ))}
               </List>
-
-              {/* <ul>
-                {pullRequestEvents &&
-                  pullRequestEvents.map(event => (
-                    <li>
-                      <a href={event.payload.pull_request.html_url}>
-                        {event.payload.pull_request.title}
-                      </a>
-                    </li>
-                  ))}
-              </ul> */}
-            </Segment>
+            </Segment> */}
           </Segment>
         )}
       </Segment>
