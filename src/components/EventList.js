@@ -1,5 +1,11 @@
 import React, { Fragment } from 'react';
-import { List, Segment, Header } from 'semantic-ui-react';
+import { List, Segment, Header, Label } from 'semantic-ui-react';
+
+const colors = {
+  merged: 'violet',
+  closed: 'red',
+  open: 'green'
+};
 
 const EventList = ({ title, eventArray, iconName }) => (
   <Fragment>
@@ -7,21 +13,30 @@ const EventList = ({ title, eventArray, iconName }) => (
       {title}
     </Header>
     <Segment attached>
-      <List divided relaxed>
-        {eventArray &&
-          eventArray.map(event => (
-            <List.Item>
+      {eventArray.length > 0 ? (
+        <List divided relaxed>
+          {eventArray.map(event => (
+            <List.Item key={event.id}>
               <List.Icon name={iconName} />
               <List.Content>
-                <List.Header
-                  as="a"
-                  href={`https://github.com/${event.repo.name}`}>
-                  {event.repo.name}
+                <List.Header as="a" href={event.url}>
+                  {event.name}
+                  {event.status && (
+                    <Label
+                      style={{ marginLeft: '10px' }}
+                      color={colors[event.status]}
+                      size="tiny">
+                      {event.status}
+                    </Label>
+                  )}
                 </List.Header>
               </List.Content>
             </List.Item>
           ))}
-      </List>
+        </List>
+      ) : (
+        `No ${title} to show`
+      )}
     </Segment>
   </Fragment>
 );

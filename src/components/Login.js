@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Input, Segment, Header, Icon } from 'semantic-ui-react';
+import { Input, Segment, Header, Icon } from 'semantic-ui-react';
 
 class Login extends Component {
   state = {
@@ -19,25 +19,30 @@ class Login extends Component {
   };
 
   render() {
+    const { hasError } = this.props;
     return (
       <Segment textAlign="center">
         <Header as="h2" icon>
           <Icon name="github alternate" />
           Github Lookup
         </Header>
-        <Card.Content>
-          <form onSubmit={this.handleSubmit}>
-            <Input
-              type="text"
-              placeholder="Enter a github username"
-              value={this.state.username}
-              onChange={e => this.handleChange(e.target.value)}
-              size="massive"
-              action="Login"
-              fluid
-            />
-          </form>
-        </Card.Content>
+        <form onSubmit={this.handleSubmit}>
+          {hasError && (
+            <Segment inverted color="red" secondary>
+              Please enter a valid github username.
+            </Segment>
+          )}
+          <Input
+            type="text"
+            placeholder="Enter a github username"
+            value={this.state.username}
+            onChange={e => this.handleChange(e.target.value)}
+            size="massive"
+            action="Login"
+            error={hasError}
+            fluid
+          />
+        </form>
       </Segment>
     );
   }
