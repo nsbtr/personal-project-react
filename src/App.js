@@ -1,4 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import {
+  updateForkedEvents,
+  updatePullRequestEvents,
+  setLoggedIn
+} from './actions';
 import './App.css';
 import 'semantic-ui-css/semantic.min.css';
 import { formatForkedRepoData, formatPullRequestData } from './helpers';
@@ -7,11 +13,11 @@ import Login from './components/Login';
 import EventList from './components/EventList';
 
 class App extends Component {
-  state = {
-    forkEvents: [],
-    pullRequestEvents: [],
-    isLoggedIn: false
-  };
+  // state = {
+  //   forkEvents: [],
+  //   pullRequestEvents: [],
+  //   isLoggedIn: false
+  // };
 
   handleSubmit = username => {
     fetch(`https://api.github.com/users/${username}/events`)
@@ -40,7 +46,7 @@ class App extends Component {
   };
 
   render() {
-    const { isLoggedIn, forkEvents, pullRequestEvents, hasError } = this.state;
+    const { isLoggedIn, forkEvents, pullRequestEvents, hasError } = this.props;
     return (
       <Segment textAlign="center" basic>
         <Header as="h2" icon>
@@ -68,4 +74,22 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    forkEvents: state.forkEvents,
+    pullRequestEvents: state.pullRequestEvents,
+    isLoggedIn: state.isLoggedIn,
+    hasError: state.hasError
+  };
+};
+
+const mapDispatchToProps = {
+  updateForkedEvents,
+  updatePullRequestEvents,
+  setLoggedIn
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
