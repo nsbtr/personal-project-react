@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button, Input } from 'semantic-ui-react';
 
 class Login extends Component {
   state = {
@@ -20,15 +21,15 @@ class Login extends Component {
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
-          <input
+          <Input
             type="text"
             placeholder="Enter username"
             value={this.state.username}
             onChange={e => this.handleChange(e.target.value)}
           />
-          <button type="submit" onClick={this.handleSubmit}>
+          <Button type="submit" onClick={this.handleSubmit}>
             View
-          </button>
+          </Button>
         </form>
       </div>
     );
