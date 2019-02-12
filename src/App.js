@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import 'semantic-ui-css/semantic.min.css';
 import { formatForkedRepoData, formatPullRequestData } from './helpers';
-import { Segment } from 'semantic-ui-react';
+import { Segment, Header, Icon } from 'semantic-ui-react';
 import Login from './components/Login';
 import EventList from './components/EventList';
 
@@ -42,11 +42,15 @@ class App extends Component {
   render() {
     const { isLoggedIn, forkEvents, pullRequestEvents, hasError } = this.state;
     return (
-      <Segment basic>
+      <Segment textAlign="center" basic>
+        <Header as="h2" icon>
+          <Icon name="github alternate" />
+          Github Lookup
+        </Header>
         {!isLoggedIn ? (
           <Login onSubmit={this.handleSubmit} hasError={hasError} />
         ) : (
-          <Segment basic>
+          <Segment textAlign="left" basic>
             <EventList
               title="Forked Repos"
               iconName="fork"
