@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import 'semantic-ui-css/semantic.min.css';
+import { Container, Header, List, Segment } from 'semantic-ui-react';
 import Login from './components/Login';
 
 const data = [
@@ -3176,7 +3177,8 @@ const data = [
 class App extends Component {
   state = {
     forkEvents: [],
-    pullRequestEvents: []
+    pullRequestEvents: [],
+    isLoggedIn: false
   };
 
   handleSubmit = username => {
@@ -3191,7 +3193,8 @@ class App extends Component {
 
     this.setState({
       forkEvents: eventData.ForkEvent || [],
-      pullRequestEvents: eventData.PullRequestEvent || []
+      pullRequestEvents: eventData.PullRequestEvent || [],
+      isLoggedIn: true
     });
 
     // fetch(`https://api.github.com/users/${username}/events`)
@@ -3211,33 +3214,68 @@ class App extends Component {
   };
 
   render() {
+    const { isLoggedIn, forkEvents, pullRequestEvents } = this.state;
     return (
-      <div>
-        My amazing app
-        <Login onSubmit={this.handleSubmit} />
-        <h2>Forked Repos</h2>
-        <ul>
-          {this.state.forkEvents &&
-            this.state.forkEvents.map(event => (
-              <li>
-                <a href={`https://github.com/${event.repo.name}`}>
-                  {event.repo.name}
-                </a>
-              </li>
-            ))}
-        </ul>
-        <h2>Pull Requests</h2>
-        <ul>
-          {this.state.pullRequestEvents &&
-            this.state.pullRequestEvents.map(event => (
-              <li>
-                <a href={event.payload.pull_request.html_url}>
-                  {event.payload.pull_request.title}
-                </a>
-              </li>
-            ))}
-        </ul>
-      </div>
+      <Segment basic>
+        {!isLoggedIn ? (
+          <Login onSubmit={this.handleSubmit} />
+        ) : (
+          <Segment basic>
+            <Header as="h2" attached="top">
+              Forked Repos
+            </Header>
+            <Segment attached>
+              <List divided relaxed>
+                {forkEvents &&
+                  forkEvents.map(event => (
+                    <List.Item>
+                      <List.Icon name="fork" />
+                      <List.Content>
+                        <List.Header
+                          as="a"
+                          href={`https://github.com/${event.repo.name}`}>
+                          {event.repo.name}
+                        </List.Header>
+                      </List.Content>
+                    </List.Item>
+                  ))}
+              </List>
+            </Segment>
+
+            <Header as="h2" attached="top">
+              Pull Requests
+            </Header>
+            <Segment attached>
+              <List divided relaxed>
+                {pullRequestEvents &&
+                  pullRequestEvents.map(event => (
+                    <List.Item>
+                      <List.Icon name="github" />
+                      <List.Content>
+                        <List.Header
+                          as="a"
+                          href={event.payload.pull_request.html_url}>
+                          {event.payload.pull_request.title}
+                        </List.Header>
+                      </List.Content>
+                    </List.Item>
+                  ))}
+              </List>
+
+              {/* <ul>
+                {pullRequestEvents &&
+                  pullRequestEvents.map(event => (
+                    <li>
+                      <a href={event.payload.pull_request.html_url}>
+                        {event.payload.pull_request.title}
+                      </a>
+                    </li>
+                  ))}
+              </ul> */}
+            </Segment>
+          </Segment>
+        )}
+      </Segment>
     );
   }
 }

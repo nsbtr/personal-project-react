@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Input } from 'semantic-ui-react';
+import { Card, Input, Segment, Header, Icon } from 'semantic-ui-react';
 
 class Login extends Component {
   state = {
@@ -12,6 +12,7 @@ class Login extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+
     if (this.props.onSubmit) {
       this.props.onSubmit(this.state.username);
     }
@@ -19,19 +20,25 @@ class Login extends Component {
 
   render() {
     return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <Input
-            type="text"
-            placeholder="Enter username"
-            value={this.state.username}
-            onChange={e => this.handleChange(e.target.value)}
-          />
-          <Button type="submit" onClick={this.handleSubmit}>
-            View
-          </Button>
-        </form>
-      </div>
+      <Segment textAlign="center">
+        <Header as="h2" icon>
+          <Icon name="github alternate" />
+          Github Lookup
+        </Header>
+        <Card.Content>
+          <form onSubmit={this.handleSubmit}>
+            <Input
+              type="text"
+              placeholder="Enter a github username"
+              value={this.state.username}
+              onChange={e => this.handleChange(e.target.value)}
+              size="massive"
+              action="Login"
+              fluid
+            />
+          </form>
+        </Card.Content>
+      </Segment>
     );
   }
 }
