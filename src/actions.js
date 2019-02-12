@@ -1,3 +1,5 @@
+import { formatForkedRepoData, formatPullRequestData } from './helpers';
+
 export const UPDATE_FORKED_EVENTS = 'UPDATE_FORKED_EVENTS';
 export const UPDATE_PULL_REQUEST_EVENTS = 'UPDATE_PULL_REQUEST_EVENT';
 export const SET_LOGGED_IN = 'SET_LOGGED_IN';
@@ -11,12 +13,41 @@ export const updatePullRequestEvents = payload => ({
   payload
 });
 
-export const setLoggedIn = isLoggedIn => ({
+export const setLoggedIn = payload => ({
   type: SET_LOGGED_IN,
-  isLoggedIn
+  payload
 });
 
-export const setHasError = hasError => ({
+export const setHasError = payload => ({
   type: SET_LOGGED_IN,
-  hasError
+  payload
 });
+
+export const updateData = username => {
+  return dispatch => {
+    fetch(`https://api.github.com/users/${username}/events`)
+      .then(resp => resp.json())
+      .then(data => {
+        const eventData = data.reduce((acc, event) => {
+          return {
+            ...acc,
+            [event.type]: acc[event.type]
+              ? [...acc[event.type], { ...event }]
+              : [{ ...event }]
+          };
+        }, {});
+
+        const forkedEvents = eventData.ForkEvent
+          ? formatForkedRepoData(eventData.ForkEvent)
+          : [];
+        const pullRequestEvents = eventData.PullRequestEvent
+          ? formatPullRequestData(eventData.PullRequestEvent)
+          : [];
+
+        dispatch(updateForkedEvents(forkedEvents));
+        dispatch(updatePullRequestEvents(pullRequestEvents));
+        dispatch(setLoggedIn(true));
+      })
+      .catch(() => dispatch(setHasError(true)));
+  };
+};

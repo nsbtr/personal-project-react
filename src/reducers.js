@@ -26,7 +26,7 @@ const pullRequestEvents = (state = [], action) => {
 const isLoggedIn = (state = false, action) => {
   switch (action.type) {
     case SET_LOGGED_IN:
-      return action.isLoggedIn;
+      return action.payload;
     default:
       return state;
   }
@@ -35,7 +35,7 @@ const isLoggedIn = (state = false, action) => {
 const hasError = (state = false, action) => {
   switch (action.type) {
     case SET_LOGGED_IN:
-      return action.hasError;
+      return action.payload;
     default:
       return state;
   }
